@@ -87,7 +87,7 @@ void parse(List<Map> description) {
         if (it.name in ["current", "apparentPower", "reactivePower", "powerFactor", "energyToday",
                         "energyYesterday", "energyTotal", "voltageWithUnit", "powerWithUnit",
                         "voltage", "power", "energy"]) {
-            logging(it.descriptionText, 100)
+            logging(it.descriptionText, 1)
             sendEvent(it)
         } else {
             log.warn "Got '$it.name' attribute data, but doesn't know what to do with it! Did you choose the right device type?"
@@ -131,7 +131,7 @@ private String getDriverVersion() {
     comment = ""
     if(comment != "") state.comment = comment
     String version = "v1.1.1.1123T"
-    logging("getDriverVersion() = ${version}", 100)
+    logging("getDriverVersion() = ${version}", 1)
     sendEvent(name: "driver", value: version)
     updateDataValue('driver', version)
     return version

@@ -1089,7 +1089,7 @@ boolean parseResult(Map result, boolean missingChild) {
         sendEvent(name: "templateData", value: "${n}", isStateChange: false)
     }
     if (result.containsKey("RestartReason")) {
-        log.debug("RestartReason: $result.RestartReason")
+        logging("RestartReason: $result.RestartReason", 1)
     }
     if (result.containsKey("TuyaMCU")) {
         logging("TuyaMCU: $result.TuyaMCU",99)
@@ -1628,7 +1628,7 @@ private String getDriverVersion() {
     comment = ""
     if(comment != "") state.comment = comment
     String version = "v1.1.1.1123T"
-    logging("getDriverVersion() = ${version}", 100)
+    logging("getDriverVersion() = ${version}", 1)
     sendEvent(name: "driver", value: version)
     updateDataValue('driver', version)
     return version
@@ -2601,7 +2601,7 @@ void tasmota_refreshChildrenAgain() {
 }
 
 Map tasmota_refresh(Map metaConfig=null) {
-	logging("tasmota_refresh(metaConfig=$metaConfig)", 100)
+	logging("tasmota_refresh(metaConfig=$metaConfig)", 1)
     state = [:]
 
     tasmota_getAction(tasmota_getCommandString("Status", "0"), callback="tasmota_parseConfigureChildDevices")
@@ -2755,7 +2755,7 @@ void tasmota_configureChildDevices(hubitat.scheduling.AsyncResponse asyncRespons
             deviceInfo["numSwitch"] -= 2
         }
     }
-    logging("Device info found: $deviceInfo", 100)
+    logging("Device info found: $deviceInfo", 1)
 
     List driverName = ["Tasmota - Universal Plug/Outlet (Child)", "Generic Component Switch"]
     String namespace = "tasmota"
