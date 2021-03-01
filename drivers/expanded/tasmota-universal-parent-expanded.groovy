@@ -906,7 +906,6 @@ void parseJSON(String jsonData) {
 
 boolean parseResult(Map result, boolean missingChild) {
     boolean log99 = logging("parseResult: $result", 99)
-    logging("parseResult: $result", 100)
     // BEGIN:getTasmotaNewParserForStatusSTS()
     if (result.containsKey("StatusSTS")) {
         logging("StatusSTS: $result.StatusSTS",99)
@@ -1090,7 +1089,7 @@ boolean parseResult(Map result, boolean missingChild) {
         sendEvent(name: "templateData", value: "${n}", isStateChange: false)
     }
     if (result.containsKey("RestartReason")) {
-        log.warn("RestartReason: $result.RestartReason")
+        log.debug("RestartReason: $result.RestartReason")
     }
     if (result.containsKey("TuyaMCU")) {
         logging("TuyaMCU: $result.TuyaMCU",99)
@@ -1118,33 +1117,33 @@ boolean parseResult(Map result, boolean missingChild) {
         if (result.ENERGY.containsKey("Total")) {
             logging("Total: $result.ENERGY.Total kWh",99)
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"energyTotal", value:"$result.ENERGY.Total kWh"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"energyTotal", value:"$result.ENERGY.Total"]], missingChild)
         }
         if (result.ENERGY.containsKey("Today")) {
             logging("Today: $result.ENERGY.Today kWh",99)
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"energyToday", value:"$result.ENERGY.Today kWh"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"energyToday", value:"$result.ENERGY.Today"]], missingChild)
         }
         if (result.ENERGY.containsKey("Yesterday")) {
-            logging("Yesterday: $result.ENERGY.Yesterday kWh",99)
+            logging("Yesterday: $result.ENERGY.Yesterday",99)
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"energyYesterday", value:"$result.ENERGY.Yesterday kWh"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"energyYesterday", value:"$result.ENERGY.Yesterday"]], missingChild)
         }
         if (result.ENERGY.containsKey("Current")) {
             logging("Current: $result.ENERGY.Current A",99)
             def r = (result.ENERGY.Current == null) ? 0 : result.ENERGY.Current
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"current", value:"$r A"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"current", value:"$r"]], missingChild)
         }
         if (result.ENERGY.containsKey("ApparentPower")) {
             logging("apparentPower: $result.ENERGY.ApparentPower VA",99)
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"apparentPower", value:"$result.ENERGY.ApparentPower VA"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"apparentPower", value:"$result.ENERGY.ApparentPower"]], missingChild)
         }
         if (result.ENERGY.containsKey("ReactivePower")) {
             logging("reactivePower: $result.ENERGY.ReactivePower VAr",99)
     
-            missingChild = callChildParseByTypeId("POWER1", [[name:"reactivePower", value:"$result.ENERGY.ReactivePower VAr"]], missingChild)
+            missingChild = callChildParseByTypeId("POWER1", [[name:"reactivePower", value:"$result.ENERGY.ReactivePower"]], missingChild)
         }
         if (result.ENERGY.containsKey("Factor")) {
             logging("powerFactor: $result.ENERGY.Factor",99)
