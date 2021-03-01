@@ -410,6 +410,12 @@ TreeMap getDeviceConfigurations() {
         installCommands: [],
         deviceLink: ''],
 
+        [typeId: 'pzem-power-meter',
+         name: 'PZEM Power Meter',
+         template: '{"NAME":"PZEM","GPIO":[0,62,0,98,0,0,0,0,0,0,0,0,0],"FLAG":0,"BASE":1}',
+         installCommands: [],
+         deviceLink: 'https://tasmota.github.io/docs/PZEM-0XX/'],
+
         [typeId: 'lumary-rgbcct-led-strip', 
         name: 'Lumary RGBCCT LED Strip',
         template: '{"NAME":"Lumary LED","GPIO":[17,0,0,0,37,40,0,0,38,41,39,0,0],"FLAG":0,"BASE":18}',
@@ -2212,6 +2218,16 @@ void tasmota_configureChildDevices(hubitat.scheduling.AsyncResponse asyncRespons
             
             driverName = ["Tasmota - Universal Plug/Outlet (Child)", "Generic Component Switch"]
         }
+    }
+
+    if(deviceInfo["hasEnergy"] && !deviceInfo["hasFanControl"] && !deviceInfo["isShutter"] && deviceInfo["numSwitch"] == 0 && deviceInfo["sensorMap"].isEmpty()) {
+        namespace = "tasmota"
+	driverName = ["Tasmota - Universal Power Meter (Child)"]
+        String childId = "POWER1"
+        String childName = tasmota_getChildDeviceNameRoot(keepType=true) + " ${tasmota_getMinimizedDriverName(driverName[0])} ($childId)"
+        String childLabel = "${tasmota_getMinimizedDriverName(device.getLabel())} (1)"
+
+        tasmota_createChildDevice(namespace, driverName, childId, childName, childLabel)
     }
     
     if(deviceInfo["hasFanControl"] == true) {

@@ -479,6 +479,12 @@ TreeMap getDeviceConfigurations() {
         installCommands: [],
         deviceLink: ''],
 
+        [typeId: 'pzem-power-meter',
+         name: 'PZEM Power Meter',
+         template: '{"NAME":"PZEM","GPIO":[0,62,0,98,0,0,0,0,0,0,0,0,0],"FLAG":0,"BASE":1}',
+         installCommands: [],
+         deviceLink: 'https://tasmota.github.io/docs/PZEM-0XX/'],
+
         [typeId: 'lumary-rgbcct-led-strip', 
         name: 'Lumary RGBCCT LED Strip',
         template: '{"NAME":"Lumary LED","GPIO":[17,0,0,0,37,40,0,0,38,41,39,0,0],"FLAG":0,"BASE":18}',
@@ -1250,6 +1256,7 @@ boolean parseResult(Map result, boolean missingChild) {
         missingChild = callChildParseByTypeId("SHUTTER", [[name:"shutter", value:result.Shutter1.clone()]], missingChild)
     }
     // END:  getTasmotaNewParserForShutter()
+
     tasmota_updatePresence("present")
     return missingChild
 }
@@ -2561,6 +2568,7 @@ void sendCommand(String command, String argument, callback="tasmota_sendCommandP
 }
 
 void updatePresence(String presence) {
+    sendEvent(name: "presence", value: presence)
 }
 
 void tasmota_installedPreConfigure() {
@@ -2653,8 +2661,7 @@ void tasmota_runInstallCommands(List installCommands) {
 }
 
 void tasmota_updatePresence(String presence) {
-    logging("tasmota_updatePresence(presence=$presence) DISABLED", 1)
-     
+    sendEvent(name: "presence", value: presence)
 }
 
 Map tasmota_parseDescriptionAsMap(description) {
@@ -2791,6 +2798,15 @@ void tasmota_configureChildDevices(hubitat.scheduling.AsyncResponse asyncRespons
             
             driverName = ["Tasmota - Universal Plug/Outlet (Child)", "Generic Component Switch"]
         }
+    }
+
+    if(deviceInfo["hasEnergy"] && !deviceInfo["hasFanControl"] && !deviceInfo["isShutter"] && deviceInfo["numSwitch"] == 0 && deviceInfo["sensorMap"].isEmpty()) {
+        namespace = "tasmota"
+	driverName = ["Tasmota - Universal Power Meter (Child)"]
+        String childId = "POWER1"
+        String childName = tasmota_getChildDeviceNameRoot(keepType=true) + " ${tasmota_getMinimizedDriverName(driverName[0])} ($childId)"
+        String childLabel = "${tasmota_getMinimizedDriverName(device.getLabel())} (1)"
+        tasmota_createChildDevice(namespace, driverName, childId, childName, childLabel)
     }
     
     if(deviceInfo["hasFanControl"] == true) {
