@@ -35,7 +35,10 @@ metadata {
         // END:  getDefaultMetadataCapabilities()
         capability "PresenceSensor"
         capability "Initialize"
-        
+
+        attribute "time", "string"
+        attribute "uptime", "string"
+	
         // BEGIN:getDefaultParentMetadataAttributes()
         attribute   "ip", "string"
         attribute   "ipLink", "string"
@@ -1102,10 +1105,10 @@ boolean parseResult(Map result, boolean missingChild) {
         logging("SetOption113 (Hubitat enabled): $result.SetOption113",99)
     }
     if (result.containsKey("Uptime")) {
-        logging("Uptime: $result.Uptime",99)
-    
-        state.uptime = result.Uptime
-        updateDataValue('uptime', result.Uptime)
+        sendEvent(name: "uptime", value: result.Uptime, isStateChange: false)
+    }
+    if (result.containsKey("Time")) {
+        sendEvent(name: "time", value: result.Time, isStateChange: false)
     }
     // END:  getTasmotaNewParserForBasicData()
     // BEGIN:getTasmotaNewParserForEnergyMonitor()
