@@ -38,7 +38,7 @@ metadata {
 
         attribute "time", "string"
         attribute "uptime", "string"
-	
+
         // BEGIN:getDefaultParentMetadataAttributes()
         attribute   "ip", "string"
         attribute   "ipLink", "string"
@@ -1449,8 +1449,6 @@ String getDeviceActionType(String childDeviceNetworkId) {
 
 /** Calls FROM Child devices */
 void componentRefresh(com.hubitat.app.DeviceWrapper cd) {
-    String actionType = getDeviceActionType(cd.deviceNetworkId)
-    logging("componentRefresh(cd=${cd.displayName} (${cd.deviceNetworkId})) actionType=$actionType", 1)
     refresh()
 }
 

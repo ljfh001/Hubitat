@@ -37,6 +37,8 @@ metadata {
         capability "EnergyMeter"
         // END:  getDefaultMetadataCapabilitiesForEnergyMonitor()
 
+        attribute   "yesterday", "string"
+
         // BEGIN:getDefaultMetadataAttributesForEnergyMonitor()
         attribute   "current", "string"
         attribute   "apparentPower", "string"
@@ -83,6 +85,7 @@ String getDeviceInfoByName(infoName) {
 
 /* These functions are unique to each driver */
 void parse(List<Map> description) {
+    sendEvent(name: "yesterday", value: new Date().previous().format("yyyy-MM-dd"))
     description.each {
         if (it.name in ["current", "apparentPower", "reactivePower", "powerFactor", "energyToday",
                         "energyYesterday", "energyTotal", "voltageWithUnit", "powerWithUnit",
